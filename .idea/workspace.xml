@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4636c3bf-1cec-4ec6-8dcd-da1f0eb788e6" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="1" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.000000000000002" />
+      <entry key="S10" value="1.000000124071023" />
+      <entry key="S30" value="1.0199444037406198" />
+      <entry key="S60" value="1.4069552373048584" />
+      <entry key="M2" value="3.221444577825062" />
+      <entry key="M5" value="11.15479742289666" />
+      <entry key="M10" value="27.41754400377174" />
+      <entry key="M15" value="46.84813697044993" />
+      <entry key="M30" value="96.75733895765785" />
+      <entry key="H1" value="149.08483599514764" />
+      <entry key="H2" value="187.90752201819686" />
+      <entry key="H4" value="211.6906133951225" />
+      <entry key="D1" value="234.18117471899754" />
+      <entry key="W1" value="238.3047374176834" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="1.7470935507378728E-109" />
+      <entry key="S5" value="3.2953305906037247E-44" />
+      <entry key="S10" value="2.1668284641037903E-22" />
+      <entry key="S30" value="9.022293959353599E-8" />
+      <entry key="S60" value="4.215390274918512E-4" />
+      <entry key="M2" value="0.028982220698056057" />
+      <entry key="M5" value="0.389619802289951" />
+      <entry key="M10" value="1.3468818257532376" />
+      <entry key="M15" value="2.5411401728216285" />
+      <entry key="M30" value="5.585465868193422" />
+      <entry key="H1" value="8.719613809416911" />
+      <entry key="H2" value="11.01368581519302" />
+      <entry key="H4" value="12.408043162532145" />
+      <entry key="D1" value="13.719764313614768" />
+      <entry key="W1" value="13.959584619841038" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="2.044245648453316E-6" />
+      <entry key="MS500" value="0.07279584915427847" />
+      <entry key="S2" value="0.5194295516488321" />
+      <entry key="S5" value="0.7695036100804331" />
+      <entry key="S10" value="0.8772136727452557" />
+      <entry key="S30" value="0.977212748746338" />
+      <entry key="S60" value="1.3856796627007322" />
+      <entry key="M2" value="3.237551752548736" />
+      <entry key="M5" value="11.530842829751414" />
+      <entry key="M10" value="28.749618956535038" />
+      <entry key="M15" value="49.373950736855534" />
+      <entry key="M30" value="102.3285481078997" />
+      <entry key="H1" value="157.7939375059272" />
+      <entry key="H2" value="198.9147037141539" />
+      <entry key="H4" value="224.09502303646755" />
+      <entry key="D1" value="247.9002733878963" />
+      <entry key="W1" value="252.26422537316077" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3Gic30cOdsD7AnMxGQ9iFK8H1kd" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "D:/projects/SystemLogAnalyzer",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\projects\SystemLogAnalyzer\api" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="api" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="SystemLogAnalyzer" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="false" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="D:\projects\SystemLogAnalyzer\api\api.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-c59985aa861c-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.24374.152" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4636c3bf-1cec-4ec6-8dcd-da1f0eb788e6" name="Changes" comment="" />
+      <created>1784457627770</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1784457627770</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

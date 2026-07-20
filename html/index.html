@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syslog Sentinel</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #10141c;
+    --panel: #171d29;
+    --panel-border: #262f40;
+    --text: #e7ebf3;
+    --muted: #8894a8;
+    --amber: #f2a93b;
+    --teal: #4fd1c5;
+    --red: #ef5d5d;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  .navbar-sentinel {
+    background: var(--panel);
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .navbar-sentinel .brand-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--teal);
+    display: inline-block;
+    box-shadow: 0 0 8px var(--teal);
+  }
+  #status-dot { transition: background .2s, box-shadow .2s; }
+  #status-dot.offline { background: var(--red); box-shadow: 0 0 8px var(--red); }
+
+  .card-panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: .6rem;
+  }
+
+  .stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 1.9rem; font-weight: 600; }
+  .stat-label { color: var(--muted); font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; }
+  .stat-accent-amber { color: var(--amber); }
+  .stat-accent-teal { color: var(--teal); }
+  .stat-accent-red { color: var(--red); }
+
+  .table-sentinel { color: var(--text); margin-bottom: 0; }
+  .table-sentinel thead th {
+    color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .04em;
+    border-bottom: 1px solid var(--panel-border); font-weight: 600;
+  }
+  .table-sentinel td, .table-sentinel th { border-color: var(--panel-border); vertical-align: middle; }
+  .table-sentinel tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+  .severity-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .78rem;
+    padding: .2rem .55rem;
+    border-radius: .35rem;
+    font-weight: 600;
+  }
+  .sev-high { background: rgba(239,93,93,.15); color: var(--red); }
+  .sev-med  { background: rgba(242,169,59,.15); color: var(--amber); }
+  .sev-low  { background: rgba(79,209,197,.15); color: var(--teal); }
+
+  .form-control-dark {
+    background: #0d1119; border: 1px solid var(--panel-border); color: var(--text);
+  }
+  .form-control-dark:focus {
+    background: #0d1119; border-color: var(--teal); color: var(--text);
+    box-shadow: 0 0 0 .2rem rgba(79,209,197,.15);
+  }
+
+  .btn-amber {
+    background: var(--amber); border-color: var(--amber); color: #1a1300; font-weight: 600;
+  }
+  .btn-amber:hover { background: #ffb84d; border-color: #ffb84d; color: #1a1300; }
+
+  .btn-outline-teal {
+    border-color: var(--teal); color: var(--teal); font-weight: 500;
+  }
+  .btn-outline-teal:hover { background: var(--teal); color: #0a1a18; }
+
+  #empty-state, #error-state { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-sentinel px-3 px-md-4 py-3">
+  <div class="d-flex align-items-center gap-2">
+    <span class="brand-dot"></span>
+    <span class="fw-bold fs-5">Syslog Sentinel</span>
+    <span class="text-muted small ms-2 d-none d-md-inline">brute-force login monitor</span>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    <span id="status-dot" class="brand-dot"></span>
+    <span id="status-text" class="small text-muted mono">checking API…</span>
+  </div>
+</nav>
+
+<div class="container-fluid px-3 px-md-4 py-4">
+
+  <!-- Controls -->
+  <div class="card-panel p-3 mb-4">
+    <div class="row g-2 align-items-end">
+      <div class="col-6 col-md-2">
+        <label class="stat-label d-block mb-1">Min attempts</label>
+        <input type="number" id="min-attempts" class="form-control form-control-dark" value="10" min="0">
+      </div>
+      <div class="col-6 col-md-3 d-grid">
+        <label class="stat-label d-block mb-1">&nbsp;</label>
+        <button id="btn-analyze-server" class="btn btn-amber">
+          <i class="bi bi-hdd-network"></i> Analyze server log
+        </button>
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="stat-label d-block mb-1">Or upload a .log file</label>
+        <input type="file" id="file-input" class="form-control form-control-dark" accept=".log,.txt">
+      </div>
+      <div class="col-12 col-md-3 d-grid">
+        <label class="stat-label d-block mb-1">&nbsp;</label>
+        <button id="btn-analyze-upload" class="btn btn-outline-teal" disabled>
+          <i class="bi bi-upload"></i> Analyze upload
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card-panel p-3">
+        <div class="stat-label">Flagged sources</div>
+        <div id="stat-sources" class="stat-value stat-accent-amber">–</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card-panel p-3">
+        <div class="stat-label">Total attempts</div>
+        <div id="stat-attempts" class="stat-value stat-accent-red">–</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card-panel p-3">
+        <div class="stat-label">Targeted users</div>
+        <div id="stat-users" class="stat-value stat-accent-teal">–</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card-panel p-3">
+        <div class="stat-label">Top offender</div>
+        <div id="stat-top" class="mono" style="font-size:1rem; padding-top:.5rem;">–</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <!-- Chart -->
+    <div class="col-12 col-lg-5">
+      <div class="card-panel p-3 h-100">
+        <div class="stat-label mb-2">Top offenders</div>
+        <canvas id="chart-offenders" height="260"></canvas>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="col-12 col-lg-7">
+      <div class="card-panel p-3 h-100">
+        <div class="stat-label mb-2">Flagged source / user pairs</div>
+        <div class="table-responsive">
+          <table class="table table-sentinel">
+            <thead>
+              <tr><th>Source IP</th><th>Target user</th><th>Attempts</th><th>Severity</th></tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+        <div id="empty-state" class="text-center py-4 d-none">
+          <i class="bi bi-shield-check fs-3 d-block mb-2"></i>
+          No source crossed the attempt threshold. Nothing to flag yet.
+        </div>
+        <div id="error-state" class="text-center py-4 d-none">
+          <i class="bi bi-plug fs-3 d-block mb-2"></i>
+          <span id="error-message">Couldn't reach the API.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  // Change this if your API runs somewhere other than localhost:8000
+  const API_BASE = "http://127.0.0.1:8000";
+
+  const minAttemptsInput = document.getElementById("min-attempts");
+  const fileInput = document.getElementById("file-input");
+  const btnServer = document.getElementById("btn-analyze-server");
+  const btnUpload = document.getElementById("btn-analyze-upload");
+  const statusDot = document.getElementById("status-dot");
+  const statusText = document.getElementById("status-text");
+
+  let chart;
+
+  fileInput.addEventListener("change", () => {
+    btnUpload.disabled = !fileInput.files.length;
+  });
+
+  btnServer.addEventListener("click", () => analyzeServerLog());
+  btnUpload.addEventListener("click", () => analyzeUploadedFile());
+
+  async function checkHealth() {
+    try {
+      const res = await fetch(`${API_BASE}/`);
+      if (!res.ok) throw new Error();
+      statusDot.classList.remove("offline");
+      statusText.textContent = "API connected";
+    } catch {
+      statusDot.classList.add("offline");
+      statusText.textContent = "API offline";
+    }
+  }
+
+  async function analyzeServerLog() {
+    const minAttempts = minAttemptsInput.value || 10;
+    setLoading(btnServer, true);
+    try {
+      const res = await fetch(`${API_BASE}/api/summary?min_attempts=${minAttempts}`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.detail || `Request failed (${res.status})`);
+      }
+      const data = await res.json();
+      renderResults(data);
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setLoading(btnServer, false);
+    }
+  }
+
+  async function analyzeUploadedFile() {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const minAttempts = minAttemptsInput.value || 10;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setLoading(btnUpload, true);
+    try {
+      const res = await fetch(`${API_BASE}/api/upload?min_attempts=${minAttempts}`, {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.detail || `Request failed (${res.status})`);
+      }
+      const data = await res.json();
+      renderResults(data);
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      setLoading(btnUpload, false);
+    }
+  }
+
+  function setLoading(btn, isLoading) {
+    btn.disabled = isLoading || (btn === btnUpload && !fileInput.files.length);
+    btn.innerHTML = isLoading
+      ? `<span class="spinner-border spinner-border-sm"></span> Analyzing…`
+      : btn === btnServer
+        ? `<i class="bi bi-hdd-network"></i> Analyze server log`
+        : `<i class="bi bi-upload"></i> Analyze upload`;
+  }
+
+  function severityFor(count) {
+    if (count > 50) return { label: "high", cls: "sev-high" };
+    if (count > 25) return { label: "medium", cls: "sev-med" };
+    return { label: "low", cls: "sev-low" };
+  }
+
+  function renderResults(rows) {
+    document.getElementById("error-state").classList.add("d-none");
+    const tbody = document.getElementById("results-body");
+    const emptyState = document.getElementById("empty-state");
+    tbody.innerHTML = "";
+
+    if (!rows.length) {
+      emptyState.classList.remove("d-none");
+      updateStats([]);
+      updateChart([]);
+      return;
+    }
+    emptyState.classList.add("d-none");
+
+    for (const row of rows) {
+      const sev = severityFor(row.attempt_count);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="mono">${row.source}</td>
+        <td class="mono">${row.user}</td>
+        <td class="mono">${row.attempt_count}</td>
+        <td><span class="severity-pill ${sev.cls}">${sev.label}</span></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    updateStats(rows);
+    updateChart(rows);
+  }
+
+  function updateStats(rows) {
+    document.getElementById("stat-sources").textContent = new Set(rows.map(r => r.source)).size || 0;
+    document.getElementById("stat-attempts").textContent = rows.reduce((sum, r) => sum + r.attempt_count, 0);
+    document.getElementById("stat-users").textContent = new Set(rows.map(r => r.user)).size || 0;
+
+    const top = [...rows].sort((a, b) => b.attempt_count - a.attempt_count)[0];
+    document.getElementById("stat-top").textContent = top ? `${top.source} (${top.attempt_count})` : "–";
+  }
+
+  function updateChart(rows) {
+    const top10 = [...rows].sort((a, b) => b.attempt_count - a.attempt_count).slice(0, 10);
+    const ctx = document.getElementById("chart-offenders").getContext("2d");
+
+    if (chart) chart.destroy();
+    chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: top10.map(r => r.source),
+        datasets: [{
+          label: "Attempts",
+          data: top10.map(r => r.attempt_count),
+          backgroundColor: "#f2a93b",
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        indexAxis: "y",
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: "#8894a8" }, grid: { color: "#262f40" } },
+          y: { ticks: { color: "#e7ebf3", font: { family: "IBM Plex Mono" } }, grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  function showError(message) {
+    document.getElementById("results-body").innerHTML = "";
+    document.getElementById("empty-state").classList.add("d-none");
+    document.getElementById("error-message").textContent = message || "Couldn't reach the API.";
+    document.getElementById("error-state").classList.remove("d-none");
+  }
+
+  checkHealth();
+</script>
+</body>
+</html>
